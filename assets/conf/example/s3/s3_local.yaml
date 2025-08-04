@@ -1,0 +1,13 @@
+endpoint_url: 'http://localhost'
+asynchronous: False
+
+key: ''
+secret: ''
+client_kwargs:
+  verify: False
+  region_name: ""
+
+config_kwargs:
+  max_pool_connections: 30
+  retries:
+    max_attempts: 3

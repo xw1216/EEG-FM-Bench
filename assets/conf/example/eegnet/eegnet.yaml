@@ -1,0 +1,52 @@
+# Basic configuration
+seed: 42
+master_port: 51001
+multitask: false  # Train separate models for each dataset
+
+# Data configuration
+data:
+  datasets:
+#    tuab: 'finetune'
+  batch_size: 1024
+  num_workers: 1
+
+# Model configuration
+model:
+  pretrained_path: null
+
+# Training configuration
+training:
+  max_epochs: 200
+  weight_decay: 0.01
+  max_grad_norm: 3.0
+
+  lr_schedule: "cosine"
+  max_lr: 5e-3
+  encoder_lr_scale: 1.0
+  warmup_epochs: 5
+  warmup_scale: 1e-1
+  pct_start: 0.1          # For OneCycleLR
+  min_lr: 5e-4
+
+  # Training options
+  use_amp: false
+  freeze_encoder: false  # Allow full fine-tuning for single dataset
+
+# Logging configuration
+logging:
+  experiment_name: "eegnet"
+  output_dir: "/path/to/your/code/assets/run/log/eegnet"
+  ckpt_dir: "/path/to/your/code/assets/run/ckpt/eegnet/seperated_full"
+
+  # Cloud logging
+  use_cloud: true
+  cloud_backend: "wandb"
+
+  project: "eegnet"
+  offline: false
+
+  tags: ["eegnet"]
+
+  # Logging intervals
+  log_step_interval: 2
+  ckpt_interval: 100

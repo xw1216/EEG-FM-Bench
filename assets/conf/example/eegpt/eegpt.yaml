@@ -1,0 +1,90 @@
+# Training pattern flags
+seed: 42
+master_port: 51002
+multitask: true
+model_type: 'eegpt'
+
+# Data configuration
+data:
+  batch_size: 32
+  num_workers: 1
+  datasets:
+    tuab: 'finetune'
+
+# EEGPT-specific model configuration
+model:
+  # Pretrained weights - each model will load from this checkpoint
+  pretrained_path: "/path/to/your/code/assets/run/ckpt/pretrain/eegpt_mcae_58chs_4s_large4E.ckpt"
+
+  # EEGPT architecture parameters
+  patch_size: 64
+  patch_stride: 32
+  embed_num: 4
+  embed_dim: 512
+  depth: 8
+  num_heads: 8
+  mlp_ratio: 4.0
+
+  # Regularization
+  dropout_rate: 0.1
+  attn_dropout_rate: 0.1
+  drop_path_rate: 0.1
+
+  # Model initialization
+  init_std: 0.02
+  qkv_bias: true
+
+  # Channel adaptation
+  use_channel_conv: false
+  conv_chan_dim: 22
+
+  # Classification head settings
+  linear_probe1_dim: 16
+  linear_probe1_max_norm: 1.0
+  linear_probe2_max_norm: 0.25
+  head_dropout: 0.1
+  mlp_hidden_dim: [128]
+
+# Training configuration
+training:
+  max_epochs: 50
+  weight_decay: 0.01
+  max_grad_norm: 3.0
+
+  # Optimizer settings
+  lr_schedule: "onecycle"  # 'onecycle' or 'cosine'
+  max_lr: 5e-4
+  encoder_lr_scale: 0.1    # Scale factor for encoder learning rate
+  warmup_epochs: 5
+  warmup_scale: 1e-2
+  pct_start: 0.2          # For OneCycleLR
+  min_lr: 1e-6            # For CosineAnnealingLR
+
+  # Training options
+  freeze_encoder: false     # Whether to freeze encoder weights
+  use_amp: true           # Use automatic mixed precision
+
+  label_smoothing: 0.1    # Label smoothing factor
+
+# Logging configuration
+logging:
+  experiment_name: "eegpt"
+  output_dir: "/path/to/your/code/assets/run/log/eegpt"
+  ckpt_dir: "/path/to/your/code/assets/run/ckpt/eegpt/unified"
+  
+  # Cloud logging configuration
+  use_cloud: true
+  cloud_backend: "wandb"  # Options: 'wandb', 'comet', or 'both'
+  
+  # Unified cloud logging parameters (works for both wandb and comet)
+  project: 'eegpt'           # Project name (uses experiment_name if not specified)
+  entity: null            # Wandb entity / Comet workspace
+  api_key: null           # API key (or set via WANDB_API_KEY/COMET_API_KEY environment variables)
+  offline: false
+  
+  tags: ['eegpt']
+
+  # Logging intervals
+  log_step_interval: 1      # Log every N steps
+  ckpt_interval: 5       # Evaluate every N epochs
+

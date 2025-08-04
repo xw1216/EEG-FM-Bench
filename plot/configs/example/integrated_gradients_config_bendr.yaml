@@ -1,0 +1,44 @@
+# IntegratedGradients
+
+model_type: 'bendr'
+
+ckpt_path: '/path/to/your/code'
+output_dir: '/path/to/your/code'
+
+seed: 42
+
+# Label
+tag: ['bendr', 'integrated_gradients', 'test', '4']
+
+# Datasets
+datasets:
+    tuab: 'finetune'
+    workload: 'finetune'
+    tusl: 'finetune'
+    seed_vii: 'finetune'
+    adftd: 'finetune'
+    things_eeg_2: 'finetune'
+    mimul_11: 'finetune'
+    tuev: 'finetune'
+    seed: 'finetune_sub_dependent'
+    hmc: 'finetune'
+    motor_mv_img: 'finetune'
+    seed_v: 'finetune_sub_dependent'
+
+# Data Split
+split: "test"  # train, valid, test
+
+# IntegratedGradients
+n_steps: 10
+baseline_type: "random"  # zero, random, gaussian
+ig_target: "channel"
+
+# NoiseTunnel Params
+noise_tunnel_type: "smoothgrad"  # smoothgrad, smoothgrad_sq, vargrad
+noise_tunnel_samples: 10
+noise_tunnel_stdevs: 0.2
+
+# visualization
+num_batch: 1000
+generate_class_average: true
+generate_per_sample: true

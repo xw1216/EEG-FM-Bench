@@ -1,0 +1,11 @@
+endpoint_url: 'http://localhost'
+asynchronous: False
+
+key: ''
+secret: ''
+
+config_kwargs:
+  max_pool_connections: 64
+  tcp_keepalive: True
+  retries:
+    max_attempts: 10
