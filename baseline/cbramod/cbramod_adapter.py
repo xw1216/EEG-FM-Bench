@@ -13,7 +13,7 @@ logger = logging.getLogger('baseline')
 
 class CBraModDatasetAdapter(AbstractDatasetAdapter):
     def _setup_adapter(self):
-        """Initialize EEGPT-specific adapter configurations."""
+        """Initialize CBraMod-specific adapter configurations."""
         self.model_name = 'cbramod'
         self.scale = 0.01
         self.freq = 256
