@@ -9,7 +9,9 @@
 
 *A comprehensive benchmark for systematic and standardized evaluation of EEG foundation models*
 
-[📁 Project Architecture](#-project-architecture) • [🚀 Quick Start](#-quick-start) • [📊 Datasets](#-datasets) • [🏗️ Models](#️-supported-models) • [📈 Results](#-benchmark-results) • [📖 Documentation](#-documentation) • [🤝 Limitations & Contributing](#-limitations--contributing)
+[✨ Features](#-key-features) • [📈 Results](#-benchmark-results) • [📁 Project Structure](#-project-structure) • [🚀 Quick Start](#-quick-start) • [📊 Datasets](#-datasets) • [🏗️ Models](#️-supported-models)
+
+[🖥️ HPC](#-high-performance-computing) • [📖 Documentation](#-documentation) • [🤝 Limitations & Contributing](#-limitations--contributing) • [📚 Others](#-citations)
 
 </div>
 
@@ -18,6 +20,10 @@
 ## 🌟 What is EEG-FM-Bench?
 
 EEG-FM-Bench addresses a critical gap in neuroscience AI research: the lack of standardized evaluation frameworks for EEG foundation models. As these models rapidly proliferate, inconsistent evaluation methods have made fair comparisons nearly impossible, hindering scientific progress.
+
+<div align="center">
+  <img src="assets/img/pipeline.png" alt="EEG-FM-Bench Pipeline" width="600">
+</div>
 
 **Our contributions:**
 - 🎯 **Unified Benchmark Platform**: First comprehensive framework for standardized EEG-FM evaluation
@@ -59,7 +65,37 @@ Comprehensive evaluation of state-of-the-art EEG foundation models:
 - **Integrated Gradients**: Understand model decision-making processes across different architectures
 - **Neurophysiological Validation**: Ensure models focus on relevant brain regions
 
-## 📁 Project Architecture
+## 📈 Benchmark Results
+
+### Key Findings
+
+🔍 **Generalization Gap**: Frozen backbone evaluation reveals that many current foundation models struggle with out-of-the-box transfer, achieving near-random performance on many tasks.
+
+🎯 **Architecture Matters**: Models with EEG-specific designs (CBraMod, EEGPT) consistently outperform generic transformers.
+
+🔄 **Multi-task Magic**: Joint training across paradigms significantly boosts performance, especially for underperforming models.
+
+### Sample Results (Balanced Accuracy %)
+
+| Model | SEED (Emotion) | PhysioMI (MI) | HMC (Sleep) |
+|-------|---------------|-----------------|-------------|
+| **BENDR** | 59.50±0.42 | 47.78±0.28 | 72.63±0.13 |
+| **BIOT** | 63.87±1.77 | 27.38±0.35 | 71.01±0.07 |
+| **LaBraM** | 61.59±1.71 | 57.27±0.26 | 69.87±0.10 |
+| **EEGPT** | 69.81±0.45 | 54.16±0.18 | 69.67±1.24 |
+| **CBraMod** | 70.83±0.28 | 56.74±0.36 | 71.48±0.40 |
+
+*Results shown for separate full fine-tuning strategy. See paper for complete analysis and visualizations.*
+
+### Visualizations
+<div align="center">
+  <img src="assets/img/vis.png" alt="Benchmark Visualization Results" width="800">
+</div>
+
+
+
+
+## 📁 Project Structure
 
 ```
 EEG-FM-Bench/
@@ -101,7 +137,7 @@ pip install -r requirements.txt
 
 ### ⚙️ Configuration Setup
 
-1. **Update project paths** in `./common/path.py`:
+Step 1: **Update project paths** in `./common/path.py`:
 ```python
 RUN_ROOT =
 LOG_ROOT =
@@ -110,7 +146,7 @@ DATABASE_PROC_ROOT =
 DATABASE_CACHE_ROOT =
 ```
 
-2. **Configure your experiment** using YAML files like examples in `assets/conf/example/`, values not assigned will be set according to pydantic model class:
+Step 2: **Configure your experiment** using YAML files like examples in `assets/conf/example/`, values not assigned will be set according to pydantic model class:
 ```yaml
 # Example: assets/conf/example/eegpt/eegpt.yaml
 model:
@@ -181,7 +217,7 @@ Our benchmark encompasses 14 carefully curated datasets spanning 10 canonical EE
 </details>
 
 <details>
-<summary><b>🧩 Cognitive & Neurodegenerative</b></summary>
+<summary><b>🧩 Cognitive</b></summary>
 
 - **Things-EEG-2**: Binary visual target detection (target vs non-target)
 - **Workload**: Binary mental workload assessment (arithmetic calculation vs resting)
@@ -228,12 +264,16 @@ print(conf.citation)
 - Some datasets may require **data use agreements**
 
 **Step 4: Download & Organize**
-```bash
+```
 # Follow the directory structure specified in each dataset file
 # Example structure (varies by dataset):
 DATABASE_RAW_ROOT/
 ├── dataset_name/
-│   └── scan_dir
+│   ├── scan_dir (raw data dir)
+│   ├── summary (statistical result caching)
+│   └── other files
+├── dataset_name/
+└── ...
 ```
 
 **Step 5: Configure Paths**
@@ -245,7 +285,7 @@ vim assets/conf/example/preproc/preproc_remote.yaml
 
 #### ⚠️ Important Considerations
 
-- **No Direct Downloads**: Dataset files contain **source information**, not download links
+- **No Direct Downloads**: Dataset scripts contain **source information**, not download links
 - **Individual Licensing**: Each dataset has **unique terms and requirements**
 - **Registration Often Required**: Many datasets need **approval before access**
 - **Large File Sizes**: Plan for **several GBs per dataset**
@@ -268,28 +308,6 @@ vim assets/conf/example/preproc/preproc_remote.yaml
 ### Classical Baselines
 - **EEGNet**: Compact CNN for EEG classification
 - **EEGConformer**: Hybrid CNN-Transformer architecture combining local feature extraction with global attention
-
-## 📈 Benchmark Results
-
-### Key Findings
-
-🔍 **Generalization Gap**: Frozen backbone evaluation reveals that many current foundation models struggle with out-of-the-box transfer, achieving near-random performance on many tasks.
-
-🎯 **Architecture Matters**: Models with EEG-specific designs (CBraMod, EEGPT) consistently outperform generic transformers.
-
-🔄 **Multi-task Magic**: Joint training across paradigms significantly boosts performance, especially for underperforming models.
-
-### Sample Results (Balanced Accuracy %)
-
-| Model | SEED (Emotion) | PhysioMI (MI) | HMC (Sleep) |
-|-------|---------------|-----------------|-------------|
-| **BENDR** | 59.50±0.42 | 47.78±0.28 | 72.63±0.13 |
-| **BIOT** | 63.87±1.77 | 27.38±0.35 | 71.01±0.07 |
-| **LaBraM** | 61.59±1.71 | 57.27±0.26 | 69.87±0.10 |
-| **EEGPT** | 69.81±0.45 | 54.16±0.18 | 69.67±1.24 |
-| **CBraMod** | 70.83±0.28 | 56.74±0.36 | 71.48±0.40 |
-
-*Results shown for separate full fine-tuning strategy. See paper for complete analysis.*
 
 ## 🖥️ High-Performance Computing
 
@@ -549,6 +567,35 @@ ModelRegistry.register_model(
 - `baseline/eegpt/` - EEGPT for foundation model implementation example
 </details>
 
+## 🤝 Limitations & Contributing
+
+We welcome contributions from the community!
+
+### 🚨 Known Limitations
+
+This project was initially developed for personal research purposes and implemented as a single-developer effort. While we've made it available to the community, please be aware of the following limitations:
+
+- **🐛 Bugs & Issues**: As a personal project, you may encounter bugs or inconsistencies in the codebase. The overall design might not always follow best practices or feel convenient for all use cases.
+
+- **🔧 Design Decisions**: Some architectural choices were made to solve specific research problems and may not generalize well to other scenarios. We acknowledge that the framework might need significant refactoring for broader adoption.
+
+- **📦 Missing Model Implementations**: Some foundation models referenced in our paper have not released their official code or pre-trained weights. In these cases, we excluded models entirely when reliable implementation was not feasible.
+
+- **⚡ Reproducibility Challenges**: Due to the above limitations, exact reproduction of all published results may not always be possible. We've done our best to document these cases clearly.
+
+- **🏗️ Single Developer Limitations**: Code style, documentation quality, and API design may be inconsistent across different parts of the codebase.
+
+**We greatly appreciate your understanding and encourage contributions to help improve these limitations!**
+
+### How to Contribute
+- 🐛 **Bug Reports**: Open an issue with reproduction steps - these are especially valuable given the current limitations
+- 🚀 **Feature Requests**: Propose new models, datasets, or analysis tools  
+- 📝 **Documentation**: Improve our guides and examples - documentation PRs are highly welcomed
+- 🔬 **Research**: Share your findings and improvements
+- 🔧 **Code Quality**: Help refactor and improve the overall codebase design
+- 📦 **Model Implementations**: Contribute official implementations of missing foundation models
+
+
 ## 📚 Citations
 
 If you use EEG-FM-Bench in your research, please cite our paper:
@@ -640,35 +687,6 @@ When using specific models, please also cite the original papers:
 }
 ```
 </details>
-
-## 🤝 Limitations & Contributing
-
-We welcome contributions from the community!
-
-### 🚨 Known Limitations
-
-This project was initially developed for personal research purposes and implemented as a single-developer effort. While we've made it available to the community, please be aware of the following limitations:
-
-- **🐛 Bugs & Issues**: As a personal project, you may encounter bugs or inconsistencies in the codebase. The overall design might not always follow best practices or feel convenient for all use cases.
-
-- **🔧 Design Decisions**: Some architectural choices were made to solve specific research problems and may not generalize well to other scenarios. We acknowledge that the framework might need significant refactoring for broader adoption.
-
-- **📦 Missing Model Implementations**: Some foundation models referenced in our paper have not released their official code or pre-trained weights. In these cases, we excluded models entirely when reliable implementation was not feasible.
-
-- **⚡ Reproducibility Challenges**: Due to the above limitations, exact reproduction of all published results may not always be possible. We've done our best to document these cases clearly.
-
-- **🏗️ Single Developer Limitations**: Code style, documentation quality, and API design may be inconsistent across different parts of the codebase.
-
-**We greatly appreciate your understanding and encourage contributions to help improve these limitations!**
-
-### How to Contribute
-- 🐛 **Bug Reports**: Open an issue with reproduction steps - these are especially valuable given the current limitations
-- 🚀 **Feature Requests**: Propose new models, datasets, or analysis tools  
-- 📝 **Documentation**: Improve our guides and examples - documentation PRs are highly welcomed
-- 🔬 **Research**: Share your findings and improvements
-- 🔧 **Code Quality**: Help refactor and improve the overall codebase design
-- 📦 **Model Implementations**: Contribute official implementations of missing foundation models
-
 
 ## 📄 License
 

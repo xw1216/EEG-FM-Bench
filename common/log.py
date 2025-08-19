@@ -5,7 +5,6 @@ import os.path
 from typing import Optional
 from logging import Filter, Formatter, StreamHandler
 
-from common.distributed import get_global_rank, get_is_slurm_job, get_is_master
 
 PRECISION_DICT = {
     "lr": "6e",

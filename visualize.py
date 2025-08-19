@@ -52,11 +52,11 @@ def load_model_config(config_path: str) -> tuple[str, AbstractConfig]:
     return model_type, cfg
 
 
-def create_visualizer(model_config: AbstractConfig, vis_args):
+def create_visualizer(model_config, vis_args):
     if isinstance(model_config, AbstractConfig):
         return BaselineVisualizer(model_config, vis_args)
     else:
-        raise ValueError(f"Unsupported model config type: {type(model_config)}")
+        raise ValueError(f"Unsupported model configuration type: {type(model_config)}")
 
 
 def main():
