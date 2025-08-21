@@ -77,13 +77,13 @@ Comprehensive evaluation of state-of-the-art EEG foundation models:
 
 ### Sample Results (Balanced Accuracy %)
 
-| Model | SEED (Emotion) | PhysioMI (MI) | HMC (Sleep) |
-|-------|---------------|-----------------|-------------|
-| **BENDR** | 59.50±0.42 | 47.78±0.28 | 72.63±0.13 |
-| **BIOT** | 63.87±1.77 | 27.38±0.35 | 71.01±0.07 |
-| **LaBraM** | 61.59±1.71 | 57.27±0.26 | 69.87±0.10 |
-| **EEGPT** | 69.81±0.45 | 54.16±0.18 | 69.67±1.24 |
-| **CBraMod** | 70.83±0.28 | 56.74±0.36 | 71.48±0.40 |
+<div align="center">
+  <img src="assets/img/result-1.png" alt="Sample Results Table 1" width="800">
+</div>
+<div align="center">
+  <img src="assets/img/result-2.png" alt="Sample Results Table 2" width="800">
+</div>
+
 
 *Results shown for separate full fine-tuning strategy. See paper for complete analysis and visualizations.*
 
