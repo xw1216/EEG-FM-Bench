@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Paper](https://img.shields.io/badge/Paper-arXiv-red)](https://arxiv.org/abs/your-paper-link)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-red)](https://arxiv.org/abs/2508.17742)
 [![Code](https://img.shields.io/badge/Code-GitHub-green)](https://github.com/xw1216/EEG-FM-Bench)
 [![Datasets](https://img.shields.io/badge/Datasets-14_Curated-blue)](#-datasets)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](LICENSE)
@@ -601,11 +601,14 @@ This project was initially developed for personal research purposes and implemen
 If you use EEG-FM-Bench in your research, please cite our paper:
 
 ```bibtex
-@article{eeg-fm-bench2024,
-  title={EEG-FM-Bench: A Comprehensive Benchmark for the Systematic Evaluation of EEG Foundation Models},
-  author={[Authors]},
-  journal={arXiv preprint arXiv:xxxx.xxxxx},
-  year={2024}
+@misc{xiong2025eegfmbenchcomprehensivebenchmarksystematic,
+      title={EEG-FM-Bench: A Comprehensive Benchmark for the Systematic Evaluation of EEG Foundation Models}, 
+      author={Wei Xiong and Jiangtong Li and Jie Li and Kun Zhu},
+      year={2025},
+      eprint={2508.17742},
+      archivePrefix={arXiv},
+      primaryClass={eess.SP},
+      url={https://arxiv.org/abs/2508.17742}, 
 }
 ```
 
