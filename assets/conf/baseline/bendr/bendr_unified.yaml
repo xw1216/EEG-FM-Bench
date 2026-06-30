@@ -1,0 +1,119 @@
+# BENDR Unified Training Configuration
+# This configuration demonstrates multitask training with BENDR model
+
+# Basic configuration
+seed: 42
+master_port: 51501
+multitask: true
+model_type: 'bendr'
+
+# Data configuration
+data:
+  batch_size: 64
+  num_workers: 1
+  datasets:
+    tuab: 'finetune'
+    seed: 'finetune_sub_dependent'
+    hmc: 'finetune'
+    # ...
+
+# Model configuration
+model:
+  pretrained_path: null
+  pretrained_conv_path: null
+  
+  # BENDR encoder parameters
+  emb_dim: 512
+  conv_width: [3, 2, 2, 2, 2, 2]
+  conv_drop_rate: 0.0
+  conv_proj_head: false
+  conv_stride: [3, 2, 2, 2, 2, 2]
+  
+  # BENDR contextualizer parameters
+  ffn_dim: 3076
+  heads: 8
+  context_layers: 8
+  context_drop_rate: 0.15
+  activation: 'gelu'
+  position_encoder: 25
+  layer_drop: 0.0
+  
+  # Masking parameters
+  mask_p_t: 0.1
+  mask_p_c: 0.004
+  mask_t_span: 6
+  
+  # Model dimensions
+  max_channels: 20
+
+  # Classifier head configuration
+  classifier_head:
+    head_type: 'avg_pool'  # Options: avg_pool, attention_pool, dual_stream_fusion, flatten_mlp
+    
+    # Common parameters
+    hidden_dims: [128]
+    dropout: 0.3
+    
+    # Attention Pool parameters (for attention_pool)
+    attn_n_head: 4
+    attn_head_dim: 128
+    
+    # Dual Stream Fusion parameters (for dual_stream_fusion)
+    fusion_mode: 'dual'  # Options: time_first, channel_first, dual
+    fusion_n_head: 4
+    fusion_head_dim: 128
+    fusion_use_rope: true
+    fusion_rope_theta: 10000.0
+    fusion_max_seq_len: 1024
+
+# Training configuration
+training:
+  max_epochs: 20
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+
+  lr_schedule: "cosine"
+  max_lr: 1e-4
+  encoder_lr_scale: 0.5
+  warmup_epochs: 2
+  warmup_scale: 1e-1
+  pct_start: 0.2          # For OneCycleLR
+  min_lr: 1e-5
+  
+  # Training options
+  use_amp: true
+  freeze_encoder: false   # Allow full fine-tuning for multitask
+  finetuning: true       # Enable finetuning mode for contextualizer
+
+  # LoRA configuration
+  lora:
+    use_lora: false
+    lora_r: 8
+    lora_alpha: 16
+    lora_dropout: 0.0
+    lora_target_modules: ['default']
+    lora_exclude_modules: null
+    lora_target_type: 'default'  # Options: default, full, attention, ffn
+    lora_scope: 'transformer'    # Options: transformer, full
+    lora_lr_scale: 1.0
+
+# Logging configuration
+logging:
+  experiment_name: "bendr"
+  run_dir: "assets/run"
+  
+  # Cloud logging
+  use_cloud: true
+  cloud_backend: "wandb"
+  project: "bendr"
+  offline: false
+
+  tags: 
+    - "bendr"
+    - "uni"
+    - "avg_pool"
+    - "full"
+  
+  # Logging intervals
+  log_step_interval: 1
+  ckpt_interval: 20

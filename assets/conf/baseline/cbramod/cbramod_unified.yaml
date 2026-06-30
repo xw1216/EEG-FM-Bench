@@ -1,0 +1,104 @@
+# CBraMod Unified Training Configuration
+# This configuration demonstrates multitask training with CBraMod model
+
+# Basic configuration
+seed: 42
+master_port: 51701
+multitask: true
+model_type: 'cbramod'
+
+# Data configuration
+data:
+  batch_size: 64
+  num_workers: 1
+  datasets:
+    tuab: 'finetune'
+    seed: 'finetune_sub_dependent'
+    hmc: 'finetune'
+    # ...
+
+# Model configuration
+model:
+  pretrained_path: null
+
+  # CBraMod architecture parameters
+  in_dim: 200
+  out_dim: 200
+  d_model: 200
+  dim_ffn: 800
+  n_layer: 12
+  n_head: 8
+  
+  # Regularization
+  dropout_rate: 0.1
+  
+  # Classifier head configuration
+  classifier_head:
+    head_type: 'avg_pool'  # Options: avg_pool, attention_pool, dual_stream_fusion, flatten_mlp
+    
+    # Common parameters
+    hidden_dims: [128]
+    dropout: 0.3
+    
+    # Attention Pool parameters (for attention_pool)
+    attn_n_head: 4
+    attn_head_dim: 50
+    
+    # Dual Stream Fusion parameters (for dual_stream_fusion)
+    fusion_mode: 'dual'  # Options: time_first, channel_first, dual
+    fusion_n_head: 4
+    fusion_head_dim: 50
+    fusion_use_rope: true
+    fusion_rope_theta: 10000.0
+    fusion_max_seq_len: 1024
+
+# Training configuration
+training:
+  max_epochs: 20
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+
+  lr_schedule: "cosine"
+  max_lr: 5e-4
+  encoder_lr_scale: 0.5
+  warmup_epochs: 2
+  warmup_scale: 1e-1
+  pct_start: 0.2          # For OneCycleLR
+  min_lr: 5e-5
+  
+  # Training options
+  use_amp: true
+  freeze_encoder: false
+
+  # LoRA configuration
+  lora:
+    use_lora: false
+    lora_r: 8
+    lora_alpha: 16
+    lora_dropout: 0.0
+    lora_target_modules: ['default']
+    lora_exclude_modules: null
+    lora_target_type: 'default'  # Options: default, full, attention, ffn
+    lora_scope: 'transformer'    # Options: transformer, full
+    lora_lr_scale: 1.0
+
+# Logging configuration
+logging:
+  experiment_name: "cbramod"
+  run_dir: "assets/run"
+  
+  # Cloud logging
+  use_cloud: true
+  cloud_backend: "wandb"
+  project: "cbramod"
+  offline: false
+
+  tags:
+    - "cbramod"
+    - "uni"
+    - "avg_pool"
+    - "full"
+  
+  # Logging intervals
+  log_step_interval: 1
+  ckpt_interval: 20
